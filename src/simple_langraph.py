@@ -132,8 +132,17 @@ app = workflow.compile(checkpointer=checkpointer)
 
 if __name__ == "__main__":
     # Use the Runnable
-    final_state = app.invoke(
-        {"messages": [HumanMessage(content="what is the weather in Seoul Korea")]},
-        config={"configurable": {"thread_id": 42}},
-    )
-    print(final_state)
+    # final_state = app.invoke(
+    #     {"messages": [HumanMessage(content="what is the weather in Seoul Korea")]},
+    #     config={"configurable": {"thread_id": 42}},
+    # )
+    # print(final_state)
+
+    # run the graph
+    thread = {"configurable": {"thread_id": "4"}}
+    question = {
+        "messages": [HumanMessage(content="what is the weather in Seoul Korea")]
+    }
+
+    for event in app.stream(question, thread, stream_mode="values"):
+        event["messages"][-1].pretty_print()
