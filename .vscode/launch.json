@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${fileDirname}",
+      "console": "internalConsole",
+    },
+    {
+      "name": "Python debugger: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "purpose": [
+        "debug-test"
+      ],
+      "console": "internalConsole",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "name": "Python Debugger: Python File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}"
+    },    
+
+  ]
+}
