@@ -3,6 +3,21 @@
   
   "configurations": [
     {
+      "name": "[🍃]chainlit",
+      "type": "python",
+      "request": "launch",
+      "module": "chainlit",
+      "args": [
+        "run",
+        "${workspaceFolder}/app.py",
+        "-w"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": false
+    },
+    {
       "name": "Python: Current File",
       "type": "python",
       "request": "launch",

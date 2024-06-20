@@ -77,7 +77,9 @@ def select_next_agent(
     elif "interest_agent" in last_message.content.lower():
         return "interest_agent"
     else:
-        auto_reply = HumanMessage(content="주어진 질문에 대해 답변을 할 수 없습니다.")
+        auto_reply = AIMessage(
+            content="주어진 질문에 대해 답변을 할 수 없습니다.", name="auto_reply"
+        )
         state["messages"].append(auto_reply)
     # Otherwise, we stop (reply to the user)
     return END
@@ -127,7 +129,7 @@ def get_intent_agent_chain(state: AgentState) -> dict:
     )
 
     result = intent_sub_chain.invoke({"query": messages[-1]})
-    return {"messages": [AIMessage(content=result)]}
+    return {"messages": [AIMessage(content=result, name="intent_agent")]}
 
 
 def get_movie_agent_chain(state: AgentState) -> dict:
@@ -204,7 +206,7 @@ def get_movie_agent_chain(state: AgentState) -> dict:
 
     result = movie_sub_chain.invoke({"query": user_query})
 
-    return {"messages": [AIMessage(content=str(result))]}
+    return {"messages": [AIMessage(content=str(result), name="movie_agent")]}
 
 
 def prep_interest_agent():
@@ -286,7 +288,7 @@ def get_interest_agent_chain(state: AgentState) -> dict:
             "table_info": TABLE_INFO,
         }
     )["result"]
-    return {"messages": [AIMessage(content=result)]}
+    return {"messages": [AIMessage(content=result, name="interest_agent")]}
 
 
 def get_solver(state: AgentState):
