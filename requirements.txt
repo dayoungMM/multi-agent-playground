@@ -6,3 +6,15 @@ python-dotenv>=1.0.1
 requests>=2.32.3
 langchain_experimental>=0.0.60
 chainlit>=1.1.302
+langchainhub
+
+#for Tool
+numexpr
+# tavily-python
+pandas
+
+#vector db
+# chromadb
+langchain_chroma
+
+wikipedia
