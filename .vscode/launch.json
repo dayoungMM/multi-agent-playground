@@ -111,6 +111,16 @@
       "justMyCode": false
     },
     {
+      "name": "[🚗]6. RentCar Agent ",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/flows/booking/rental_car_agent.py",
+      "cwd": "${workspaceFolder}",
+      "env": {"PYTHONPATH": "${workspaceFolder}"},
+      "envFile": "${workspaceFolder}/.env",
+      "console": "internalConsole",
+    },
+    {
       "name": "Python: Current File",
       "type": "python",
       "request": "launch",
