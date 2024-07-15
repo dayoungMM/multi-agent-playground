@@ -96,13 +96,28 @@
       "console": "internalConsole",
     },
     {
-      "name": "[🍃]chainlit",
+      "name": "[🖥]chainlit - simple",
       "type": "python",
       "request": "launch",
       "module": "chainlit",
       "args": [
         "run",
         "${workspaceFolder}/apps/frontend/app-naive.py",
+        "-w"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": false
+    },
+    {
+      "name": "[🖥]chainlit - flight",
+      "type": "python",
+      "request": "launch",
+      "module": "chainlit",
+      "args": [
+        "run",
+        "${workspaceFolder}/apps/frontend/app-flight.py",
         "-w"
       ],
       "cwd": "${workspaceFolder}",
