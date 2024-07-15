@@ -28,3 +28,6 @@ if __name__ == "__main__":
 
     print(result.content)
     print("end")
+
+    r = chain.invoke({"number": 3})
+    print(r)

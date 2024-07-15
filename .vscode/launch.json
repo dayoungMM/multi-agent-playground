@@ -3,6 +3,13 @@
   
   "configurations": [
     {
+      "name": "[▪️]0. install requirements ",
+      "label": "pip install",
+      "type": "shell",
+      "command": "${config:python.pythonPath} -m pip install -r requirements.txt",
+      "problemMatcher": []
+    },
+    {
       "name": "[▪️]1. llm basic ",
       "type": "debugpy",
       "request": "launch",
@@ -59,6 +66,16 @@
       "console": "internalConsole",
     },
     {
+      "name": "[✈️]6. Flight Agent Full Tool ",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/flows/booking/flight_agent_with_full_tool.py",
+      "cwd": "${workspaceFolder}",
+      "env": {"PYTHONPATH": "${workspaceFolder}"},
+      "envFile": "${workspaceFolder}/.env",
+      "console": "internalConsole",
+    },
+    {
       "name": "[✈️]7. Advanced Flight Agent ",
       "type": "debugpy",
       "request": "launch",
@@ -85,7 +102,7 @@
       "module": "chainlit",
       "args": [
         "run",
-        "${workspaceFolder}/app.py",
+        "${workspaceFolder}/apps/frontend/app-naive.py",
         "-w"
       ],
       "cwd": "${workspaceFolder}",
