@@ -7,6 +7,7 @@ from flows.booking.prep_data import DB_FILE_PATH
 from flows.booking.flight_agent import REACT_PROMPT_TEMPLATE
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+from langchain.agents import AgentExecutor, create_structured_chat_agent
 
 LLM = ChatOpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
@@ -166,6 +167,10 @@ if __name__ == "__main__":
     # TODO: ReACT Agent 만들어보기
     agent = None
     agent_executor = None
+    agent = create_structured_chat_agent(LLM, tools, prompt)  # react agent를 만들어줌
+    agent_executor = AgentExecutor(
+        agent=agent, tools=tools
+    )  # agent iteration 관리, 모니터링(callback handler), 에러 핸들링(ex: handle_parsing_errors)등 agent 실행에 필요한 기능 제공
 
     example_question = [
         "내 예약 확인해줘",
