@@ -3,13 +3,6 @@
   
   "configurations": [
     {
-      "name": "[▪️]0. install requirements ",
-      "label": "pip install",
-      "type": "shell",
-      "command": "${config:python.pythonPath} -m pip install -r requirements.txt",
-      "problemMatcher": []
-    },
-    {
       "name": "[▪️]1. llm basic ",
       "type": "debugpy",
       "request": "launch",
@@ -124,6 +117,16 @@
       "console": "internalConsole",
       "envFile": "${workspaceFolder}/.env",
       "justMyCode": false
+    },
+    {
+      "name": "[🍃]app-rag",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/backend/main.py",
+      "cwd": "${workspaceFolder}",
+      "env": {"PYTHONPATH": "${workspaceFolder}"},
+      "envFile": "${workspaceFolder}/.env",
+      "console": "internalConsole",
     },
     {
       "name": "[🚗]6. RentCar Agent ",

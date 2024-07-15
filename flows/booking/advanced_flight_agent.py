@@ -100,6 +100,7 @@ builder.add_edge("tools", "assistant")
 memory = SqliteSaver.from_conn_string(":memory:")
 advanced_agent_graph = builder.compile(checkpointer=memory)
 
+
 if __name__ == "__main__":
     tutorial_questions = [
         "Hi there, what time is my flight?",
