@@ -67,18 +67,18 @@ Begin! Reminder to ALWAYS respond with a valid json blob of a single action. Use
  (reminder to respond in a JSON blob no matter what. Answer must be in Korean)
 
 """
+# step 5: Let's put it all together
+prompt = ChatPromptTemplate.from_template(REACT_PROMPT_TEMPLATE).partial(
+    time=datetime.now(), user_info="passenger id: 3442 587242"
+)
+tools = [fetch_user_flight_information, search_flights]
+agent = create_structured_chat_agent(LLM, tools, prompt)  # react agent를 만들어줌
+agent_executor = AgentExecutor(
+    agent=agent, tools=tools
+)  # agent iteration 관리, 모니터링(callback handler), 에러 핸들링(ex: handle_parsing_errors)등 agent 실행에 필요한 기능 제공
 
 if __name__ == "__main__":
-    # step 5: Let's put it all together
     print(">>> Flight Assistant")
-    prompt = ChatPromptTemplate.from_template(REACT_PROMPT_TEMPLATE).partial(
-        time=datetime.now(), user_info="passenger id: 3442 587242"
-    )
-    tools = [fetch_user_flight_information, search_flights]
-    agent = create_structured_chat_agent(LLM, tools, prompt)  # react agent를 만들어줌
-    agent_executor = AgentExecutor(
-        agent=agent, tools=tools
-    )  # agent iteration 관리, 모니터링(callback handler), 에러 핸들링(ex: handle_parsing_errors)등 agent 실행에 필요한 기능 제공
     result = agent_executor.invoke(
         {"input": "다음주에 ICN에서 SHA로 가는 비행일정 알려줘. flight_id 포함해서"},
         handle_parsing_errors=True,  # the error will be sent back to the LLM as an observation
