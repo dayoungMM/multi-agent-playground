@@ -2,8 +2,6 @@ import os
 import uuid
 import chainlit as cl
 from dotenv import load_dotenv
-from langgraph.checkpoint.aiosqlite import AsyncSqliteSaver
-from flows.booking.advanced_flight_agent import builder
 from langchain_openai import ChatOpenAI
 
 
@@ -21,9 +19,9 @@ load_dotenv(override=True)
 async def on_message(recieved_message: cl.Message):
     send_message = cl.Message(content="")
 
-    # async for chunk in LLM.astream(recieved_message.content):
-    #     await send_message.stream_token(chunk.content)
-    # await send_message.send()
+    async for chunk in LLM.astream(recieved_message.content):
+        await send_message.stream_token(chunk.content)
+    await send_message.send()
 
     # TODO: app-flight.py를 보고 flight_agent로 바꿔보세요
     # agent 실행시키기 위해 필요한 정보
@@ -35,8 +33,7 @@ async def on_message(recieved_message: cl.Message):
         }
     }
 
-    memory = AsyncSqliteSaver.from_conn_string(":memory:")
-    agent = builder.compile(checkpointer=memory)
+    agent = None
     async for chunk in agent.astream(
         {"messages": ("user", recieved_message.content)},
         config,

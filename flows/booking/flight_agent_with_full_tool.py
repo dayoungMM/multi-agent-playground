@@ -7,7 +7,6 @@ from flows.booking.flight_tools import (
     update_ticket_to_new_flight,
     cancel_ticket,
 )
-from langchain.agents import AgentExecutor, create_structured_chat_agent
 
 LLM = ChatOpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
@@ -81,12 +80,6 @@ if __name__ == "__main__":
     # TODO: ReACT Agent 만들어보기
     full_agent = None
     full_agent_executor = None
-    full_agent = create_structured_chat_agent(LLM, full_tools, chat_prompt_template)
-    full_agent_executor = AgentExecutor(agent=full_agent, tools=full_tools)
-    result = full_agent_executor.invoke(
-        {"input": "내 예약내역 알려줘"}, handle_parsing_errors=True
-    )
-    print(result)
 
     # 이 문제를 해결하기 위해서는 추론이 필요
     # Step 1: 다음주 ICN 에서 SHA로 가는 비행기 검색
