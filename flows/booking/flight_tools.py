@@ -224,41 +224,27 @@ if __name__ == "__main__":
     print("---" * 10)
 
     # step 3: bind_tools로 llm이 어떤 툴을 사용할지 정하도록 설정
-    primary_assistant_prompt = ChatPromptTemplate.from_messages(
-        [
-            (
-                "system",
-                "You are a helpful customer support assistant for Swiss Airlines. "
-                " Use the provided tools to search for flights, company policies, and other information to assist the user's queries. "
-                " When searching, be persistent. Expand your query bounds if the first search returns no results. "
-                " If a search comes up empty, expand your search before giving up."
-                "\n\nCurrent user:\n<User>\n{user_info}\n</User>"
-                "\nCurrent time: {time}.",
-            ),
-            ("placeholder", "{messages}"),
-        ]
-    ).partial(time=datetime.now())
-
-    part_1_assistant_runnable = primary_assistant_prompt | LLM.bind_tools(
-        [fetch_user_flight_information, search_flights]
+    primary_assistant_prompt_template = """You are a helpful customer support assistant for Swiss Airlines.
+    Use the provided tools to search for flights, company policies, and other information to assist the user's queries.
+    When searching, be persistent. Expand your query bounds if the first search returns no results.
+    If a search comes up empty, expand your search before giving up.
+    Current user: <User>{user_info}</User>
+    Current time: {time}.
+    
+    Request: {messages}
+    """
+    primary_assistant_prompt = ChatPromptTemplate.from_template(
+        primary_assistant_prompt_template
     )
-
-    config = {
-        "configurable": {
-            # The passenger_id is used in our flight tools to
-            # fetch the user's flight information
-            "passenger_id": "3442 587242",
-            # Checkpoints are accessed by thread_id
-            # "thread_id": thread_id,
-        }
-    }
+    tools = [fetch_user_flight_information, search_flights]
+    part_1_assistant_runnable = primary_assistant_prompt | LLM.bind_tools(tools)
 
     result = part_1_assistant_runnable.invoke(
         {
             "messages": [HumanMessage(content="ICN에서 SHA로 가는 비행기 검색해줘.")],
             "user_info": "passenger id: 3442 587242",
+            "time": datetime.now(),
         },
-        config,
     )
     print(">>> LLM Bind Result")
     print(result)

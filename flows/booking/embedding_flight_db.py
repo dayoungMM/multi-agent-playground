@@ -89,3 +89,4 @@ if __name__ == "__main__":
     contents = [doc.page_content for doc in docs]
 
     print(">>> Query Result")
+    print(contents)

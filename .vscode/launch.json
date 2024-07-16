@@ -59,6 +59,16 @@
       "console": "internalConsole",
     },
     {
+      "name": "[✈️]6. Flight Agent Full Tool ",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/flows/booking/flight_agent_with_full_tool.py",
+      "cwd": "${workspaceFolder}",
+      "env": {"PYTHONPATH": "${workspaceFolder}"},
+      "envFile": "${workspaceFolder}/.env",
+      "console": "internalConsole",
+    },
+    {
       "name": "[✈️]7. Advanced Flight Agent ",
       "type": "debugpy",
       "request": "launch",
@@ -79,19 +89,54 @@
       "console": "internalConsole",
     },
     {
-      "name": "[🍃]chainlit",
+      "name": "[🖥]chainlit - simple",
       "type": "python",
       "request": "launch",
       "module": "chainlit",
       "args": [
         "run",
-        "${workspaceFolder}/app.py",
+        "${workspaceFolder}/apps/frontend/app-naive.py",
         "-w"
       ],
       "cwd": "${workspaceFolder}",
       "console": "internalConsole",
       "envFile": "${workspaceFolder}/.env",
       "justMyCode": false
+    },
+    {
+      "name": "[🖥]chainlit - flight",
+      "type": "python",
+      "request": "launch",
+      "module": "chainlit",
+      "args": [
+        "run",
+        "${workspaceFolder}/apps/frontend/app-flight.py",
+        "-w"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": false
+    },
+    {
+      "name": "[🍃]app-rag",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/backend/main.py",
+      "cwd": "${workspaceFolder}",
+      "env": {"PYTHONPATH": "${workspaceFolder}"},
+      "envFile": "${workspaceFolder}/.env",
+      "console": "internalConsole",
+    },
+    {
+      "name": "[🚗]6. RentCar Agent ",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/flows/booking/rental_car_agent.py",
+      "cwd": "${workspaceFolder}",
+      "env": {"PYTHONPATH": "${workspaceFolder}"},
+      "envFile": "${workspaceFolder}/.env",
+      "console": "internalConsole",
     },
     {
       "name": "Python: Current File",
