@@ -1,6 +1,5 @@
 import os
 import uuid
-from datetime import datetime
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable, RunnableConfig
 from typing import Annotated
@@ -21,7 +20,7 @@ from flows.booking.utils import create_tool_node_with_fallback, print_event
 
 LLM = ChatOpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
-    model="gpt-3.5-turbo",
+    model="gpt-4o",
     organization=os.environ.get("OPENAI_ORGANIZATION"),
 )
 
@@ -36,8 +35,9 @@ class Assistant:
 
     def __call__(self, state: State, config: RunnableConfig):
         while True:
-            configuration = config.get("configurable", {})
-            passenger_id = configuration.get("passenger_id", None)
+            # configuration = config.get("configurable", {})
+            # passenger_id = configuration.get("passenger_id", None)
+            passenger_id = "3442 587242"
             state = {**state, "user_info": passenger_id}
             result = self.runnable.invoke(state)
             # If the LLM happens to return an empty response, we will re-prompt it
@@ -54,21 +54,33 @@ class Assistant:
         return {"messages": result}
 
 
-primary_assistant_prompt = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            "You are a helpful customer support assistant for Swiss Airlines. "
-            " Use the provided tools to search for flights, company policies, and other information to assist the user's queries. "
-            " When searching, be persistent. Expand your query bounds if the first search returns no results. "
-            " If a search comes up empty, expand your search before giving up."
-            "\n\nCurrent user:\n<User>\n{user_info}\n</User>"
-            "\nCurrent time: {time}.",
-        ),
-        ("placeholder", "{messages}"),
-    ]
-).partial(time=datetime.now(), user_info="passenger id: 3442 587242")
+# primary_assistant_prompt = ChatPromptTemplate.from_messages(
+#     [
+#         (
+#             "system",
+#             "You are a helpful customer support assistant for Swiss Airlines. "
+#             " Use the provided tools to search for flights, company policies, and other information to assist the user's queries. "
+#             " When searching, be persistent. Expand your query bounds if the first search returns no results. "
+#             " If a search comes up empty, expand your search before giving up."
+#             "passenger id: 3442 587242"
+#             "\nCurrent time: {time}.",
+#         ),
+#         ("placeholder", "{messages}"),
+#     ]
+# ).partial(time=datetime.now(), user_info="passenger id: 3442 587242")
+prompt = """
+You are a helpful customer support assistant for Swiss Airlines. 
+Use the provided tools to search for flights, company policies, and other information to assist the user's queries. 
+When searching, be persistent. Expand your query bounds if the first search returns no results. 
 
+If a search comes up empty, expand your search before giving up.
+answer must be in Korean
+
+passenger id: "8498 685539"
+Current time: 2024.08.26
+Customer Asked: {messages}
+"""
+primary_assistant_prompt = ChatPromptTemplate.from_template(prompt)
 
 full_tools = [
     fetch_user_flight_information,
