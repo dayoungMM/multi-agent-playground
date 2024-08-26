@@ -1,6 +1,5 @@
 import os
 import random
-import uuid
 import chainlit as cl
 from chainlit.step import Step
 from literalai.helper import utc_now
@@ -77,10 +76,10 @@ async def on_message(recieved_message: cl.Message):
 
     elif chat_profile == "flight_assistant":
         # agent 실행시키기 위해 필요한 정보
-        thread_id = str(uuid.uuid4())
+        thread_id = str("12341234")
         config = {
             "configurable": {
-                "passenger_id": "3442 587242",
+                "passenger_id": "8498 685539",
                 "thread_id": thread_id,
             }
         }

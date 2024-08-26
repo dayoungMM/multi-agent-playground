@@ -35,18 +35,18 @@ def fetch_user_flight_information(passenger_id: str) -> list[dict]:
     cursor = conn.cursor()
 
     query = """
-    SELECT
-        t.ticket_no, t.book_ref,
-        f.flight_id, f.flight_no, f.departure_airport, f.arrival_airport, f.scheduled_departure, f.scheduled_arrival,
-        bp.seat_no, tf.fare_conditions
-    FROM
-        tickets t
-        JOIN ticket_flights tf ON t.ticket_no = tf.ticket_no
-        JOIN flights f ON tf.flight_id = f.flight_id
-        JOIN boarding_passes bp ON bp.ticket_no = t.ticket_no AND bp.flight_id = f.flight_id
-    WHERE
-        t.passenger_id = ?
-    """
+        SELECT
+            t.ticket_no, t.book_ref,
+            f.flight_id, f.flight_no, f.departure_airport, f.arrival_airport, f.scheduled_departure, f.scheduled_arrival,
+            tf.fare_conditions
+        FROM
+            tickets t
+            LEFT JOIN ticket_flights tf ON t.ticket_no = tf.ticket_no
+            JOIN flights f ON tf.flight_id = f.flight_id
+            
+        WHERE
+            t.passenger_id = ?
+        """
     cursor.execute(query, (passenger_id,))
     rows = cursor.fetchall()
     column_names = [column[0] for column in cursor.description]
