@@ -1,11 +1,17 @@
 import os
 
 # from langchain_openai import AzureOpenAIEmbeddings
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# from langchain.chains import RetrievalQA
+# from langchain.chains.retrieval_qa.base import RetrievalQA
+from langchain import hub
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
 
 CHROMA_PATH = "./data/chroma_db"
 
@@ -19,6 +25,12 @@ EMBEDDING = OpenAIEmbeddings(
 >>> how to test embedding
 query_result = embeddings.embed_query("hello world")
 """
+
+LLM = ChatOpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY"),
+    model="gpt-3.5-turbo",
+    organization=os.environ.get("OPENAI_ORGANIZATION"),
+)
 
 
 def create_chunks():
@@ -83,10 +95,26 @@ def create_index():
 if __name__ == "__main__":
     create_index()
 
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=EMBEDDING)
+    vectorstore = Chroma(persist_directory=CHROMA_PATH, embedding_function=EMBEDDING)
     query = "Which tickets/bookings cannot be rebooked online currently?"
-    docs = db.similarity_search(query, k=2)
+    docs = vectorstore.similarity_search(query, k=2)
     contents = [doc.page_content for doc in docs]
 
     print(">>> Query Result")
     print(contents)
+
+    # Retrieve and generate using the relevant snippets of the blog.
+    retriever = vectorstore.as_retriever()
+    prompt = hub.pull("rlm/rag-prompt")
+
+    def format_docs(docs):
+        return "\n\n".join(doc.page_content for doc in docs)
+
+    rag_chain = (
+        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        | prompt
+        | LLM
+        | StrOutputParser()
+    )
+
+    answer = rag_chain.invoke(query)
