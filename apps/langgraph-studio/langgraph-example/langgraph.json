@@ -1,0 +1,12 @@
+{
+  "python_version": "3.11",
+  "dockerfile_lines": [],
+  "dependencies": [
+    "./my_agent"
+  ],
+  "graphs": {
+    "agent": "./my_agent/agent.py:graph",
+    "flight_agent": "./my_agent/flight_agent.py:advanced_agent_graph"
+  },
+  "env": ".env"
+}
