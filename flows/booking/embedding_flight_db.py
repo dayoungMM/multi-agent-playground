@@ -103,7 +103,6 @@ if __name__ == "__main__":
     print(">>> Query Result")
     print(contents)
 
-    # Retrieve and generate using the relevant snippets of the blog.
     retriever = vectorstore.as_retriever()
     prompt = hub.pull("rlm/rag-prompt")
 

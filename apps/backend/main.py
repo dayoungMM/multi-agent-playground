@@ -46,7 +46,7 @@ add_routes(
     path="/joke",
 )
 
-# TODO: flight_policy.py 파일을 보고 RAG하는  router를 추가해보세요
+
 db_path = CHROMA_PATH
 if not os.path.isdir(db_path):
     raise FileNotFoundError(f"The file at path {db_path} does not exist.")
@@ -79,6 +79,8 @@ add_routes(
     rag_chain,
     path="/flight",
 )
+
+add_routes(app, retriever | format_docs, path="/retriever")
 
 
 if __name__ == "__main__":
