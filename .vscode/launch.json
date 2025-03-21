@@ -89,8 +89,18 @@
       "console": "internalConsole",
     },
     {
+      "name": "[🍃]9. LangServe ",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/backend/main.py",
+      "cwd": "${workspaceFolder}",
+      "env": {"PYTHONPATH": "${workspaceFolder}"},
+      "envFile": "${workspaceFolder}/.env",
+      "console": "internalConsole",
+    },
+    {
       "name": "[🖥]chainlit - simple",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "module": "chainlit",
       "args": [

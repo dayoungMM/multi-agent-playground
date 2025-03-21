@@ -18,6 +18,7 @@ from langgraph.graph import StateGraph
 from langgraph.prebuilt import tools_condition
 from flows.booking.utils import create_tool_node_with_fallback, print_event
 
+
 LLM = ChatOpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
     model="gpt-4o",

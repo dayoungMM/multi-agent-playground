@@ -7,7 +7,8 @@ import random
 from literalai.helper import utc_now
 from chainlit.step import Step
 from dotenv import load_dotenv
-from langchain_openai import AzureChatOpenAI
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import PromptTemplate
 from langchain_core.messages import HumanMessage
 
 
@@ -49,13 +50,7 @@ if REQUEST_NEED_CERT_FILE:
     ssl_context.load_verify_locations(cafile=cert_file)
     client = httpx.Client(verify=ssl_context)
 
-LLM_CLIENT = AzureChatOpenAI(
-    openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2023-12-01-preview"),
-    azure_deployment=os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"),
-    azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT"),
-    http_client=client,
-    timeout=60,
-)
+LLM_CLIENT = ChatOpenAI(api_key=OPENAI_API_KEY, temperature=0, model_name="gpt-4o-mini")
 
 
 MOVIE_REPO_IDS = [1]

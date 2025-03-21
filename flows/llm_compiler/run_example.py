@@ -1,6 +1,7 @@
 import os
 import ssl
 import httpx
+import random
 
 # from math_tools import get_math_tool
 from langchain import hub
@@ -35,19 +36,10 @@ if REQUEST_NEED_CERT_FILE:
     ssl_context.load_verify_locations(cafile=cert_file)
     client = httpx.Client(verify=ssl_context)
 
-# llm = AzureChatOpenAI(
-#     openai_api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2023-12-01-preview"),
-#     azure_deployment=os.environ.get("AZURE_OPENAI_GPT4_DEPLOYMENT_NAME"),
-#     azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT"),
-#     http_client=client,
-#     timeout=60,
-# )
-
 
 llm = ChatOpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
-    model="gpt-4o",
-    organization=os.environ.get("OPENAI_ORGANIZATION"),
+    model="gpt-4o-mini"
 )
 
 
@@ -65,7 +57,8 @@ search = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
 @tool
 def wikipedia_query_run(query: str) -> str:
     """Search Wikipedia for the query and return the first paragraph of the search result."""
-    return search.invoke({"query": query})
+    # return search.invoke({"query": query})
+    return random.randint(0, 1000)
 
 
 def prep():

@@ -1,24 +1,29 @@
 import os
 
-# from langchain_openai import AzureChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
+import httpx
+import ssl
+
+# Need Cleint with SSL Ceritificate
+REQUEST_NEED_CERT_FILE = (
+    os.environ.get("REQUEST_NEED_CERT_FILE", "False").lower() == "true"
+)
+
+client = None
+if REQUEST_NEED_CERT_FILE:
+    cert_file = os.environ.get("SSL_CERT_FILE", "./ssl_cacert.pem")
+    ssl_context = ssl.create_default_context()
+    ssl_context.load_verify_locations(cafile=cert_file)
+    client = httpx.Client(verify=ssl_context)
 
 
 if __name__ == "__main__":
-    # llm = AzureChatOpenAI(
-    #     openai_api_version=os.environ.get(
-    #         "AZURE_OPENAI_API_VERSION", "2023-12-01-preview"
-    #     ),
-    #     azure_deployment=os.environ.get("AZURE_OPENAI_GPT4_DEPLOYMENT_NAME"),
-    #     azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT"),
-    #     api_key=os.environ.get("AZURE_OPENAI_API_KEY"),
-    #     timeout=60,
-    # )
     llm = ChatOpenAI(
         api_key=os.environ.get("OPENAI_API_KEY"),
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini",
         organization=os.environ.get("OPENAI_ORGANIZATION"),
+        http_client=client,
     )
 
     prompt = PromptTemplate.from_template("1 + {number} = ")

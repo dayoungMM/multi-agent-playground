@@ -1,5 +1,5 @@
 import os
-
+from datetime import datetime
 from langchain_openai import ChatOpenAI
 from flows.booking.flight_tools import (
     fetch_user_flight_information,
@@ -7,6 +7,8 @@ from flows.booking.flight_tools import (
     update_ticket_to_new_flight,
     cancel_ticket,
 )
+from langchain.agents import AgentExecutor, create_structured_chat_agent
+from langchain_core.prompts import ChatPromptTemplate
 
 LLM = ChatOpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
@@ -78,8 +80,11 @@ if __name__ == "__main__":
     ]
 
     # TODO: ReACT Agent 만들어보기
-    full_agent = None
-    full_agent_executor = None
+    prompt = ChatPromptTemplate.from_template(chat_prompt_template).partial(
+        time=datetime.now(), user_info="passenger id: 3442 587242"
+    )
+    full_agent = create_structured_chat_agent(LLM, full_tools, prompt)
+    full_agent_executor = AgentExecutor(agent=full_agent, tools=full_tools)
 
     # 이 문제를 해결하기 위해서는 추론이 필요
     # Step 1: 다음주 ICN 에서 SHA로 가는 비행기 검색
@@ -88,13 +93,13 @@ if __name__ == "__main__":
     # 에러 발생!!
     # 주석처리하세요
 
-    result = full_agent_executor.invoke(
-        {
-            "input": "ticke_no 7240005432906569 예약을 다음주 ICN 에서 SHA로 가는 비행기로 변경해줘"
-        },
-        handle_parsing_errors=True,
-    )
-    print(result)
+    # result = full_agent_executor.invoke(
+    #     {
+    #         "input": "ticke_no 7240005432906569 예약을 다음주 ICN 에서 SHA로 가는 비행기로 변경해줘"
+    #     },
+    #     handle_parsing_errors=True,
+    # )
+    # print(result)
 
     # 대신 다음과 같이 추론이 필요하지 않은 질문은 잘 처리함
     result = full_agent_executor.invoke(
